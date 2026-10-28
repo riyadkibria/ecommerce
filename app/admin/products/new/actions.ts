@@ -5,7 +5,7 @@ import { createClient } from "@/app/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
-export type ImportProductsState1 = {
+export type ImportProductsState = {
   error?: string;
   message?: string;
 };
