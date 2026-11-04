@@ -2,10 +2,8 @@
 "use client";
 
 import { useActionState } from "react";
-import {
-  importFakeProducts,
-  type ImportProductsState,
-} from "./actions";
+import { importFakeProducts } from "./actions";
+import type { ImportProductsState } from "./types";
 
 const initialState: ImportProductsState = {};
 

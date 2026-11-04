@@ -4,11 +4,7 @@
 import { createClient } from "@/app/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-
-export type ImportProductsState = {
-  error?: string;
-  message?: string;
-};
+import type { ImportProductsState } from "./types";
 
 type FakeProduct = {
   id: number;
@@ -20,9 +16,9 @@ type FakeProduct = {
 };
 
 export async function importFakeProducts(
-  _previousState: ImportProductsState1,
+  _previousState: ImportProductsState,
   _formData: FormData
-): Promise<ImportProductsState1> {
+): Promise<ImportProductsState> {
   const supabase = await createClient();
 
   // 1. Authentication check
@@ -76,7 +72,7 @@ export async function importFakeProducts(
     };
   }
 
-  // 4. Validate and map API data to our database schema
+  // 4. Validate and map API data
   const rows = [];
 
   for (const product of products) {
@@ -123,8 +119,7 @@ export async function importFakeProducts(
     });
   }
 
-  // 5. Insert products into Supabase.
-  // Existing external_id values are skipped on repeated imports.
+  // 5. Insert products into Supabase
   const { error: insertError } = await supabase
     .from("products")
     .upsert(rows, {
@@ -133,7 +128,10 @@ export async function importFakeProducts(
     });
 
   if (insertError) {
-    console.error("Fake product import failed:", insertError.message);
+    console.error(
+      "Fake product import failed:",
+      insertError.message
+    );
 
     return {
       error:
