@@ -1,5 +1,6 @@
+
 import Link from "next/link";
-import type { Product } from "./type";
+import type { Product } from "@/app/products/type";
 import AddToCartButton from "@/app/components/cart/AddToCartButton";
 
 type Props = {
@@ -25,7 +26,6 @@ export default function ProductCard({ product }: Props) {
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white text-[13px] transition-colors hover:border-emerald-300">
-      {/* Product image */}
       <Link
         href={`/products/${product.id}`}
         aria-label={`View ${title}`}
@@ -40,10 +40,11 @@ export default function ProductCard({ product }: Props) {
             className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
           />
         ) : (
-          <span className="text-xs text-slate-400">No image available</span>
+          <span className="text-xs text-slate-400">
+            No image available
+          </span>
         )}
 
-        {/* Stock badge */}
         <span
           className={`absolute left-2 top-2 inline-flex items-center gap-1 rounded-full px-1.5 py-px text-[11px] font-medium ring-1 ring-inset ${
             inStock
@@ -61,14 +62,12 @@ export default function ProductCard({ product }: Props) {
       </Link>
 
       <div className="flex flex-1 flex-col p-3">
-        {/* Brand */}
         {product.brand && (
           <p className="mb-0.5 truncate text-xs text-slate-500">
             {product.brand}
           </p>
         )}
 
-        {/* Product title */}
         <Link
           href={`/products/${product.id}`}
           className="rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40"
@@ -78,7 +77,6 @@ export default function ProductCard({ product }: Props) {
           </h2>
         </Link>
 
-        {/* Price and stock status */}
         <div className="mt-2 flex items-center justify-between gap-2">
           <p className="text-sm font-semibold tabular-nums tracking-tight text-slate-900">
             {formatPrice(product.price)}
@@ -93,7 +91,6 @@ export default function ProductCard({ product }: Props) {
           </span>
         </div>
 
-        {/* Separate action area */}
         <div className="mt-auto pt-3">
           {inStock ? (
             <AddToCartButton productId={product.id} />

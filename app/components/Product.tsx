@@ -1,5 +1,9 @@
+type ProductProps = {
+  name: string;
+  price: number;
+};
 
-export default function Productsssss(props: string) {
+export default function Productsssss(props: ProductProps) {
   return (
     <>
       <h1>{props.name}</h1>

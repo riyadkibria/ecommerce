@@ -215,10 +215,10 @@ function drawLabel(
 function drawHLine(
   doc: PDFKit.PDFDocument,
   y: number,
-  x1 = LEFT,
-  x2 = RIGHT,
+  x1: number = LEFT,
+  x2: number = RIGHT,
   color: string = COLORS.line,
-  width = 0.75
+  width: number = 0.75
 ) {
   doc.moveTo(x1, y).lineTo(x2, y).lineWidth(width).strokeColor(color).stroke();
 }
