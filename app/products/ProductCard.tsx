@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import type { Product } from "./type";
 import AddToCartButton from "@/app/components/cart/AddToCartButton";
@@ -25,12 +24,12 @@ export default function ProductCard({ product }: Props) {
   const title = product.title || "Untitled product";
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-neutral-300 hover:shadow-xl">
+    <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white text-[13px] transition-colors hover:border-emerald-300">
       {/* Product image */}
       <Link
         href={`/products/${product.id}`}
         aria-label={`View ${title}`}
-        className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-neutral-50 p-5"
+        className="relative flex aspect-[4/3] items-center justify-center overflow-hidden border-b border-slate-100 bg-slate-50 p-3 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-emerald-500/40"
       >
         {product.image ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -38,30 +37,33 @@ export default function ProductCard({ product }: Props) {
             src={product.image}
             alt={title}
             loading="lazy"
-            className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+            className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
           />
         ) : (
-          <span className="text-sm text-neutral-400">
-            No image available
-          </span>
+          <span className="text-xs text-slate-400">No image available</span>
         )}
 
         {/* Stock badge */}
         <span
-          className={`absolute left-3 top-3 rounded-full px-3 py-1 text-xs font-semibold ${
+          className={`absolute left-2 top-2 inline-flex items-center gap-1 rounded-full px-1.5 py-px text-[11px] font-medium ring-1 ring-inset ${
             inStock
-              ? "bg-emerald-50 text-emerald-700"
-              : "bg-red-50 text-red-600"
+              ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
+              : "bg-rose-50 text-rose-700 ring-rose-200"
           }`}
         >
-          {inStock ? "In Stock" : "Sold Out"}
+          <span
+            className={`h-1.5 w-1.5 rounded-full ${
+              inStock ? "bg-emerald-500" : "bg-rose-500"
+            }`}
+          />
+          {inStock ? "In stock" : "Sold out"}
         </span>
       </Link>
 
-      <div className="flex flex-1 flex-col p-4">
+      <div className="flex flex-1 flex-col p-3">
         {/* Brand */}
         {product.brand && (
-          <p className="mb-1 text-xs font-medium uppercase tracking-[0.12em] text-neutral-500">
+          <p className="mb-0.5 truncate text-xs text-slate-500">
             {product.brand}
           </p>
         )}
@@ -69,22 +71,22 @@ export default function ProductCard({ product }: Props) {
         {/* Product title */}
         <Link
           href={`/products/${product.id}`}
-          className="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500"
+          className="rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40"
         >
-          <h2 className="line-clamp-2 min-h-12 text-sm font-semibold leading-6 text-neutral-900 transition-colors hover:text-neutral-600">
+          <h2 className="line-clamp-2 min-h-10 text-[13px] font-medium leading-5 text-slate-900 transition-colors hover:text-emerald-700">
             {title}
           </h2>
         </Link>
 
         {/* Price and stock status */}
-        <div className="mt-3 flex items-end justify-between gap-2">
-          <p className="text-lg font-bold tracking-tight text-neutral-950">
+        <div className="mt-2 flex items-center justify-between gap-2">
+          <p className="text-sm font-semibold tabular-nums tracking-tight text-slate-900">
             {formatPrice(product.price)}
           </p>
 
           <span
             className={`shrink-0 text-xs ${
-              inStock ? "text-emerald-700" : "text-red-600"
+              inStock ? "text-slate-500" : "text-rose-600"
             }`}
           >
             {inStock ? "Available" : "Unavailable"}
@@ -92,17 +94,16 @@ export default function ProductCard({ product }: Props) {
         </div>
 
         {/* Separate action area */}
-        <div className="mt-auto pt-4">
+        <div className="mt-auto pt-3">
           {inStock ? (
             <AddToCartButton productId={product.id} />
           ) : (
             <button
               type="button"
               disabled
-              className="flex min-h-11 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-neutral-100 px-4 py-3 text-sm font-semibold text-neutral-400"
+              className="flex h-8 w-full cursor-not-allowed items-center justify-center rounded-md border border-slate-200 bg-slate-50 px-3 text-xs font-medium text-slate-400"
             >
-              <span aria-hidden="true">−</span>
-              Currently Unavailable
+              Currently unavailable
             </button>
           )}
         </div>

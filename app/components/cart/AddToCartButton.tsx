@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -93,102 +92,91 @@ export default function AddToCartButton({
   }
 
   return (
-    <div className="w-full max-w-[233px]">
+    <div className="w-full">
       <button
         type="button"
         onClick={handleAddToCart}
         disabled={loading}
         aria-busy={loading}
-        className="
-          group grid h-[55px] w-full grid-cols-[1fr_1.618fr]
-          overflow-hidden rounded-full
-          border border-[#d9c7a0] bg-[#fbf8f3] text-[#3b3126]
-          shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_8px_21px_-13px_rgba(166,124,46,0.45)]
-          transition-[background-color,border-color,box-shadow,transform] duration-300 ease-out
-          hover:border-[#c4a867] hover:bg-[#f5eedf]
-          hover:shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_13px_21px_-13px_rgba(166,124,46,0.55)]
-          active:scale-[0.98]
-          focus-visible:outline-none
-          focus-visible:ring-2 focus-visible:ring-[#a67c2e]
-          focus-visible:ring-offset-2 focus-visible:ring-offset-white
-          disabled:cursor-not-allowed disabled:opacity-80
-          motion-reduce:transition-none motion-reduce:active:scale-100
-        "
+        className={`
+          group flex h-8 w-full items-center justify-center gap-1.5
+          rounded-md border px-3 text-xs font-medium
+          outline-none transition-colors duration-150
+          focus-visible:ring-2 focus-visible:ring-emerald-500/50
+          focus-visible:ring-offset-1 focus-visible:ring-offset-white
+          disabled:cursor-not-allowed disabled:opacity-70
+          motion-reduce:transition-none
+          ${
+            success
+              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+              : "border-emerald-600 bg-emerald-600 text-white hover:border-emerald-700 hover:bg-emerald-700"
+          }
+        `}
       >
-        <span
-          className={`
-            flex items-center justify-center border-r border-[#e6dcc8]
-            transition-colors duration-300 motion-reduce:transition-none
-            ${success ? "text-emerald-600" : "text-[#a67c2e]"}
-          `}
-        >
-          {loading ? (
-            <svg
-              className="h-[21px] w-[21px] animate-spin motion-reduce:animate-none"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden="true"
-            >
-              <circle
-                className="opacity-20"
-                cx="12"
-                cy="12"
-                r="9"
-                stroke="currentColor"
-                strokeWidth="2"
-              />
-              <path
-                d="M21 12a9 9 0 0 0-9-9"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          ) : success ? (
-            <svg
-              className="h-[21px] w-[21px]"
-              viewBox="0 0 24 24"
-              fill="none"
+        {loading ? (
+          <svg
+            className="h-3.5 w-3.5 animate-spin motion-reduce:animate-none"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="9"
               stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="m5 12.5 4.5 4.5L19 7" />
-            </svg>
-          ) : (
-            <svg
-              className="h-[21px] w-[21px] transition-transform duration-300 group-hover:scale-110 motion-reduce:transform-none"
-              viewBox="0 0 24 24"
-              fill="none"
+              strokeWidth="2.5"
+            />
+            <path
+              d="M21 12a9 9 0 0 0-9-9"
               stroke="currentColor"
-              strokeWidth="1.5"
+              strokeWidth="2.5"
               strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M3 3h2l2.4 11.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L22 7H6" />
-              <circle cx="10" cy="20" r="1" />
-              <circle cx="18" cy="20" r="1" />
-            </svg>
-          )}
-        </span>
+            />
+          </svg>
+        ) : success ? (
+          <svg
+            className="h-3.5 w-3.5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m5 12.5 4.5 4.5L19 7" />
+          </svg>
+        ) : (
+          <svg
+            className="h-3.5 w-3.5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M3 3h2l2.4 11.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L22 7H6" />
+            <circle cx="10" cy="20" r="1" />
+            <circle cx="18" cy="20" r="1" />
+          </svg>
+        )}
 
-        <span className="flex items-center justify-center px-[13px] text-[13px] font-medium leading-[1.618] tracking-[0.02em]">
-          {loading ? "Adding…" : "Add to cart"}
-        </span>
+        {loading ? "Adding…" : success ? "Added" : "Add to cart"}
       </button>
 
       {message && (
         <p
           role="status"
           aria-live="polite"
-          className={`mt-[13px] flex items-start justify-center gap-[8px] text-center text-[13px] leading-[1.618] ${
-            success ? "text-emerald-700" : "text-red-700"
+          className={`mt-1.5 text-center text-xs leading-4 ${
+            success ? "text-emerald-700" : "text-rose-700"
           }`}
         >
-          <span>{message}</span>
+          {message}
         </p>
       )}
     </div>

@@ -20,7 +20,7 @@ type Props = {
 
 const DIVISIONS = [
   "Barishal",
-  "Chattogram",
+  "Chittagong",
   "Dhaka",
   "Khulna",
   "Mymensingh",
