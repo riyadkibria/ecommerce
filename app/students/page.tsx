@@ -3,7 +3,7 @@
 interface Student {
   name: string;
   age: number;
-  city: string;
+  city: number|string;
 }
 
 export default function Home() {
@@ -17,7 +17,7 @@ export default function Home() {
     <main style={{ padding: "40px", fontFamily: "Arial" }}>
       <h1>Student Card</h1>
 
-      <h2>{student.name}</h2>
+      <h2>Name:{student.name}</h2>
 
       <p>Age: {student.age}</p>
 
