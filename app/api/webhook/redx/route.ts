@@ -5,15 +5,15 @@ import { createClient } from "@supabase/supabase-js";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const webhookSecret = process.env.REDX_WEBHOOK_SECRET!;
-
-const supabase = createClient(supabaseUrl, serviceRoleKey);
-
 export async function POST(request: NextRequest) {
   try {
-    if (!webhookSecret || !serviceRoleKey || !supabaseUrl) {
+    // 1. Read environment variables
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const webhookSecret = process.env.REDX_WEBHOOK_SECRET;
+
+    // 2. Validate environment variables
+    if (!supabaseUrl || !serviceRoleKey || !webhookSecret) {
       console.error("REDX webhook environment variables are missing");
 
       return NextResponse.json(
@@ -22,8 +22,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Prefer a secret header. Query parameter is a fallback
-    // only if REDX cannot send custom headers.
+    // 3. Initialize Supabase client inside POST
+    const supabase = createClient(supabaseUrl, serviceRoleKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    });
+
+    // 4. Verify REDX webhook secret
     const headerSecret = request.headers.get(
       "x-redx-webhook-secret"
     );
@@ -40,6 +47,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 5. Parse request body
     const body = await request.json();
 
     const trackingNumber =
@@ -50,6 +58,7 @@ export async function POST(request: NextRequest) {
       body.status ??
       body.data?.status;
 
+    // 6. Validate tracking number and status
     if (
       typeof trackingNumber !== "string" ||
       !trackingNumber.trim() ||
@@ -62,6 +71,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 7. Update shipment in Supabase
     const { data, error } = await supabase
       .from("shipments")
       .update({
@@ -71,7 +81,10 @@ export async function POST(request: NextRequest) {
       .select("id, tracking_number, status");
 
     if (error) {
-      console.error("REDX shipment update failed:", error.message);
+      console.error(
+        "REDX shipment update failed:",
+        error.message
+      );
 
       return NextResponse.json(
         { error: "Could not update shipment" },
@@ -79,6 +92,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 8. Check whether shipment exists
     if (!data || data.length === 0) {
       return NextResponse.json(
         { error: "Shipment not found" },
@@ -86,10 +100,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 9. Success response
     return NextResponse.json({
       success: true,
       updated: data.length,
     });
+
   } catch (error) {
     console.error("REDX webhook error:", error);
 
